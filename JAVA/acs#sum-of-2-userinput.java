@@ -1,3 +1,4 @@
+/*WAP to find the sum of 2 values by accepting the values form the user*/
 import java.util.*;
 
 public static void main(String args[])
