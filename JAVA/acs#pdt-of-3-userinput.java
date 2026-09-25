@@ -1,3 +1,4 @@
+/*WAP to find the product of 3 integer values by accepting values from user*/
 import java.util.*;
 
 public static void main(String args[])
