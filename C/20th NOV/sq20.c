@@ -8,3 +8,59 @@ using a user-defined function, identify the booking that generated
 the highest revenue, and calculate the total hotel revenue using recursion.
 
 */
+#include <stdio.h>
+
+struct Booking {
+    char room[20], name[50];
+    int days;
+    double rent;
+};
+
+double revenue(struct Booking b) {
+    return b.days * b.rent;
+}
+
+int highest(struct Booking b[], int n) {
+    int max = 0;
+    for (int i = 1; i < n; i++) {
+        if (revenue(b[i]) > revenue(b[max]))
+            max = i;
+    }
+    return max;
+}
+
+double totalRevenue(struct Booking b[], int n) {
+    if (n == 0)
+        return 0;
+    return revenue(b[n - 1]) + totalRevenue(b, n - 1);
+}
+
+int main() {
+    struct Booking b[10];
+    int i, max;
+
+    for (i = 0; i < 10; i++) {
+        printf("\nBooking %d\n", i + 1);
+        printf("Room number: ");
+        scanf(" %19[^\n]", b[i].room);
+        printf("Guest name: ");
+        scanf(" %49[^\n]", b[i].name);
+        printf("Number of days stayed: ");
+        scanf("%d", &b[i].days);
+        printf("Daily room rent: ");
+        scanf("%lf", &b[i].rent);
+    }
+
+    printf("\nRoom | Guest | Days | Daily Rent | Revenue\n");
+    for (i = 0; i < 10; i++)
+        printf("%s | %s | %d | %.2f | %.2f\n",
+               b[i].room, b[i].name, b[i].days,
+               b[i].rent, revenue(b[i]));
+
+    max = highest(b, 10);
+    printf("\nHighest revenue booking: Room %s, %s, %.2f\n",
+           b[max].room, b[max].name, revenue(b[max]));
+    printf("Total hotel revenue: %.2f\n", totalRevenue(b, 10));
+
+    return 0;
+}
