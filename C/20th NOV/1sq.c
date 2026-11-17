@@ -7,66 +7,69 @@ recursive function to calculate the total marks obtained by all students.
 */
 
 #include <stdio.h>
-#define N 10
 
-typedef struct {
+struct Student {
     char reg[20], name[50], department[50];
     int marks[5];
-} Student;
+};
 
-int total(Student s) {
-    int result = 0;
+int total(struct Student s) {
+    int sum = 0;
     for (int j = 0; j < 5; j++)
-        result += s.marks[j];
-    return result;
+        sum = sum + s.marks[j];
+    return sum;
 }
 
-float average(Student s) {
-    return total(s) / 5.0f;
+float average(struct Student s) {
+    return total(s) / 5.0;
 }
 
-int highest(Student a[], int n) {
-    int best = 0;
-    for (int i = 1; i < n; i++)
-        if (total(a[i]) > total(a[best]))
-            best = i;
-    return best;
+int highest(struct Student s[], int n) {
+    int max = 0;
+    for (int i = 1; i < n; i++) {
+        if (total(s[i]) > total(s[max]))
+            max = i;
+    }
+    return max;
 }
 
-int allMarks(Student a[], int n) {
-    if (n == 0) return 0;
-    return total(a[n - 1]) + allMarks(a, n - 1);
+int allMarks(struct Student s[], int n) {
+    if (n == 0)
+        return 0;
+    return total(s[n - 1]) + allMarks(s, n - 1);
 }
 
-int main(void) {
-    Student a[N];
+int main() {
+    struct Student s[10];
+    int i, j, max;
 
-    for (int i = 0; i < N; i++) {
+    for (i = 0; i < 10; i++) {
         printf("\nStudent %d\n", i + 1);
         printf("Register number: ");
-        scanf(" %19[^\n]", a[i].reg);
+        scanf(" %19[^\n]", s[i].reg);
         printf("Name: ");
-        scanf(" %49[^\n]", a[i].name);
+        scanf(" %49[^\n]", s[i].name);
         printf("Department: ");
-        scanf(" %49[^\n]", a[i].department);
-        printf("Marks in five subjects: ");
-        for (int j = 0; j < 5; j++)
-            scanf("%d", &a[i].marks[j]);
+        scanf(" %49[^\n]", s[i].department);
+        printf("Enter marks in five subjects: ");
+        for (j = 0; j < 5; j++)
+            scanf("%d", &s[i].marks[j]);
     }
 
-    printf("\nRegister | Name | Department | Marks | Total | Average\n");
-    for (int i = 0; i < N; i++) {
-        printf("%s | %s | %s | ",
-               a[i].reg, a[i].name, a[i].department);
-        for (int j = 0; j < 5; j++)
-            printf("%d ", a[i].marks[j]);
-        printf("| %d | %.2f\n", total(a[i]), average(a[i]));
+    for (i = 0; i < 10; i++) {
+        printf("\nRegister: %s\nName: %s\nDepartment: %s\n",
+               s[i].reg, s[i].name, s[i].department);
+        printf("Marks: ");
+        for (j = 0; j < 5; j++)
+            printf("%d ", s[i].marks[j]);
+        printf("\nTotal: %d\nAverage: %.2f\n",
+               total(s[i]), average(s[i]));
     }
 
-    int best = highest(a, N);
+    max = highest(s, 10);
     printf("\nHighest total: %s (%s), %d\n",
-           a[best].name, a[best].reg, total(a[best]));
-    printf("Total marks of all students: %d\n", allMarks(a, N));
+           s[max].name, s[max].reg, total(s[max]));
+    printf("Total marks of all students: %d\n", allMarks(s, 10));
 
     return 0;
 }
